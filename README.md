@@ -1,8 +1,8 @@
 # anti-degradation-skill
 
-A dedicated repository for maintaining an anti-degradation skill that prevents LLM agents from prematurely implementing, guessing without evidence, making oversized changes, and claiming completion without validation.
+[English](./README.md) | [中文](./README.zh-CN.md)
 
-Chinese overview: `README.zh-CN.md`.
+A dedicated repository for maintaining an anti-degradation skill that prevents LLM agents from prematurely implementing, guessing without evidence, making oversized changes, and claiming completion without validation.
 
 Chinese companion docs are provided as `*.zh-CN.md` files for key workflow and release documents.
 
