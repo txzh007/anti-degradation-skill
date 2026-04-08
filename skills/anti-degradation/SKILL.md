@@ -9,13 +9,29 @@ description: Prevents low-quality agent behavior such as premature implementatio
 
 This skill prevents the agent from degrading into low-quality behavior under ambiguity, speed pressure, incomplete context, or implementation momentum.
 
-It enforces:
+## Operational Flow
 
-- correct intent classification
-- evidence-based reasoning
-- clarification before costly guesses
-- minimal, scoped changes
-- mandatory validation before claiming completion
+Use this decision order when the skill is active:
+
+1. classify the current user message by intent
+2. check for ambiguity, missing context, or architecture conflict
+3. define goal, scope, validation, and out-of-scope boundary before any change
+4. gather evidence from code, docs, tools, or prior validation
+5. reuse existing capabilities or delegate when the problem requires it
+6. implement only if the user explicitly requested implementation
+7. validate in proportion to the claim
+8. report what was verified, what was not, and any remaining assumptions
+
+This flow exists to reduce rule collisions and prevent silent jumps from analysis into implementation.
+
+## Rule Severity
+
+Apply rules with this severity model:
+
+- **Hard block**: must not be violated. Examples: implementing without permission, claiming success without evidence, using type-suppression shortcuts.
+- **Strong default**: should be followed unless the task is truly trivial and low-risk. Examples: brief planning before edits, checking for existing capabilities, narrowing bug-fix scope.
+- **Conditional**: becomes mandatory when the triggering condition is present. Examples: clarification under material ambiguity, documentation lookup for external-library uncertainty, broader validation for behavior changes.
+- **Trivial-task exception**: keep the workflow lightweight for simple, local, low-risk work, but never bypass hard blocks or evidence requirements.
 
 This skill is a guardrail system, not a style suggestion. Treat every rule below as operational policy.
 

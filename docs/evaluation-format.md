@@ -38,6 +38,48 @@ or
 - <criterion 2>
 ```
 
+## Metadata schema
+
+To support automatic export and coverage checks, each case should include a per-case metadata block immediately after the `## Case N` heading.
+
+Recommended format:
+
+```md
+## Case 1
+
+```yaml
+case_id: INTENT_GATE_001
+tags: [intent, gate, investigation]
+severity: high
+rules_covered: [Intent Gate]
+task_type: investigation
+expected_failure_mode: premature-implementation
+```
+
+### User
+...
+```
+
+Required fields:
+
+- `case_id`: unique identifier for the case across the repository
+- `tags`: list of short labels for filtering and grouping
+- `severity`: one of `low`, `medium`, or `high`
+- `rules_covered`: list of canonical rule names covered by the case, for example `Intent Gate`
+- `task_type`: short category such as `investigation`, `explanation`, `implementation`, or `validation`
+- `expected_failure_mode`: concise label for the failure pattern the bad response demonstrates
+
+Optional fields:
+
+- `notes`: extra authoring context when needed
+
+Authoring rules:
+
+- place the metadata block inside the case, not before the file title and not after the next case starts
+- keep field names lowercase with underscores
+- prefer canonical gate names in `rules_covered` so coverage tooling can aggregate reliably
+- keep `expected_failure_mode` short and stable enough for reporting
+
 ## Allowed section starters
 
 Each case must begin with one of:
@@ -123,7 +165,15 @@ The markdown files are designed to convert cleanly into JSON records with a stru
       "pass_criteria": [
         "classifies as investigation",
         "does not edit files immediately"
-      ]
+      ],
+      "metadata": {
+        "case_id": "INTENT_GATE_001",
+        "tags": ["intent", "gate", "investigation"],
+        "severity": "high",
+        "rules_covered": ["Intent Gate"],
+        "task_type": "investigation",
+        "expected_failure_mode": "premature-implementation"
+      }
     }
   ]
 }
