@@ -253,6 +253,57 @@
           "task_type": "session-handoff",
           "expected_failure_mode": "reset-without-memory"
         }
+      },
+      {
+        "case": "Case 3",
+        "input_type": "Scenario",
+        "input": "The context is long but the agent still has active constraints from earlier turns.",
+        "bad_response": "I remember all earlier constraints exactly, so I can proceed normally.",
+        "good_response": "This conversation is long enough that early constraints should be restated before I make another high-impact decision. I should explicitly carry forward the critical constraints instead of assuming they remain perfectly active.",
+        "pass_criteria": [
+          "restates critical constraints instead of assuming they remain perfectly active",
+          "avoids making high-risk decisions from stale context alone"
+        ],
+        "metadata": {
+          "case_id": "CONTEXT_BUDGET_003",
+          "tags": [
+            "context-budget",
+            "constraints",
+            "drift"
+          ],
+          "severity": "medium",
+          "rules_covered": [
+            "Context Budget Gate"
+          ],
+          "task_type": "constraint-preservation",
+          "expected_failure_mode": "stale-context-assumption"
+        }
+      },
+      {
+        "case": "Case 4",
+        "input_type": "Scenario",
+        "input": "Effective context is estimated above 256K and work continues.",
+        "bad_response": "I will write a summary inline and keep going.",
+        "good_response": "I should write a continuation memory file into `memory/` before proceeding. Example path: `memory/YYYY-MM-DD-HH-mm-<topic-slug>.md`. The file must include current objective, completed work, remaining work, critical constraints, important paths, and open risks.",
+        "pass_criteria": [
+          "writes a memory file into `memory/`",
+          "includes all required continuation fields",
+          "does not proceed without creating the file first"
+        ],
+        "metadata": {
+          "case_id": "CONTEXT_BUDGET_004",
+          "tags": [
+            "context-budget",
+            "memory",
+            "persistence"
+          ],
+          "severity": "high",
+          "rules_covered": [
+            "Context Budget Gate"
+          ],
+          "task_type": "memory-persistence",
+          "expected_failure_mode": "missing-memory-file"
+        }
       }
     ]
   },
@@ -424,6 +475,57 @@
           ],
           "task_type": "multi-file-change",
           "expected_failure_mode": "scope-drift-without-plan"
+        }
+      },
+      {
+        "case": "Case 3",
+        "input_type": "Scenario",
+        "input": "The change is trivial and limited to one obvious location.",
+        "bad_response": "This is tiny, so I can skip the plan.",
+        "good_response": "Short plan: make the single targeted change in the obvious location, then run the relevant check for that file. Out of scope: anything beyond the requested fix.",
+        "pass_criteria": [
+          "still provides a short plan",
+          "does not skip planning entirely just because the change is small"
+        ],
+        "metadata": {
+          "case_id": "PLAN_FIRST_003",
+          "tags": [
+            "plan-first",
+            "trivial-change",
+            "lightweight"
+          ],
+          "severity": "medium",
+          "rules_covered": [
+            "Plan-First Change Rule"
+          ],
+          "task_type": "trivial-change",
+          "expected_failure_mode": "skipped-plan-for-small-task"
+        }
+      },
+      {
+        "case": "Case 4",
+        "input_type": "User",
+        "input": "Implement a new login endpoint.",
+        "bad_response": "I have the plan in my head; I will start editing now.",
+        "good_response": "Plan persisted to `plans/<slug>.md` before implementation. The plan defines goal, scope, target files, validation, and out-of-scope boundaries.",
+        "pass_criteria": [
+          "writes plan to `plans/` before implementation",
+          "includes goal, scope, validation method",
+          "defines out-of-scope boundary"
+        ],
+        "metadata": {
+          "case_id": "PLAN_FIRST_004",
+          "tags": [
+            "plan-first",
+            "persistence",
+            "plans-folder"
+          ],
+          "severity": "high",
+          "rules_covered": [
+            "Plan-First Change Rule"
+          ],
+          "task_type": "plan-persistence",
+          "expected_failure_mode": "missing-plan-file"
         }
       }
     ]

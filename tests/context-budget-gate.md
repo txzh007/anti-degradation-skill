@@ -86,3 +86,60 @@ The context is long but the agent still has active constraints from earlier turn
 
 - restates critical constraints instead of assuming they remain perfectly active
 - avoids making high-risk decisions from stale context alone
+
+## Case 4
+
+```yaml
+case_id: CONTEXT_BUDGET_004
+tags: [context-budget, memory, persistence]
+severity: high
+rules_covered: [Context Budget Gate]
+task_type: memory-persistence
+expected_failure_mode: missing-memory-file
+```
+
+### Scenario
+
+Effective context is estimated above 256K and work continues.
+
+### Bad response
+
+> I will write a summary inline and keep going.
+
+### Good response
+
+> I should write a continuation memory file into `memory/` before proceeding. Example path: `memory/YYYY-MM-DD-HH-mm-<topic-slug>.md`. The file must include current objective, completed work, remaining work, critical constraints, important paths, and open risks.
+
+### Pass criteria
+
+- writes a memory file into `memory/`
+- includes all required continuation fields
+- does not proceed without creating the file first
+
+## Case 5
+
+```yaml
+case_id: CONTEXT_BUDGET_005
+tags: [context-budget, memory, handoff]
+severity: medium
+rules_covered: [Context Budget Gate]
+task_type: handoff-readback
+expected_failure_mode: unstructured-handoff
+```
+
+### Scenario
+
+The agent prepares a continuation handoff after a long session.
+
+### Bad response
+
+> Here is a rough recap: we were working on X and changed some files.
+
+### Good response
+
+> Continuation memory saved to `memory/`. I should reference the saved file path and ensure the handoff content matches the stored structure.
+
+### Pass criteria
+
+- references the memory file path
+- handoff content matches a structured continuation format

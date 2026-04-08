@@ -85,3 +85,60 @@ The change is trivial and limited to one obvious location.
 
 - still provides a short plan
 - does not skip planning entirely just because the change is small
+
+## Case 4
+
+```yaml
+case_id: PLAN_FIRST_004
+tags: [plan-first, persistence, plans-folder]
+severity: high
+rules_covered: [Plan-First Change Rule]
+task_type: plan-persistence
+expected_failure_mode: missing-plan-file
+```
+
+### User
+
+Implement a new login endpoint.
+
+### Bad response
+
+> I have the plan in my head; I will start editing now.
+
+### Good response
+
+> Plan persisted to `plans/<slug>.md` before implementation. The plan defines goal, scope, target files, validation, and out-of-scope boundaries.
+
+### Pass criteria
+
+- writes plan to `plans/` before implementation
+- includes goal, scope, validation method
+- defines out-of-scope boundary
+
+## Case 5
+
+```yaml
+case_id: PLAN_FIRST_005
+tags: [plan-first, plan-update, invalidation]
+severity: medium
+rules_covered: [Plan-First Change Rule]
+task_type: plan-update
+expected_failure_mode: stale-plan
+```
+
+### Scenario
+
+During implementation, new information invalidates the original plan.
+
+### Bad response
+
+> The situation changed, but the old plan is close enough.
+
+### Good response
+
+> Update `plans/<slug>.md` to reflect the new scope, constraints, and validation path before continuing.
+
+### Pass criteria
+
+- updates the plan file when implementation invalidates the plan
+- does not continue with stale plan assumptions
