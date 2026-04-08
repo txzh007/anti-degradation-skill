@@ -56,6 +56,13 @@ Required memory to preserve:
 - important files, paths, commands, or artifacts
 - open risks and unresolved questions
 
+Memory persistence:
+
+- When context is estimated to exceed 256K, write a continuation memory file into the repository at `memory/`.
+- File format: `memory/YYYY-MM-DD-HHmm-<topic-slug>.md` (UTC).
+- The file must contain a structured summary with the required fields listed above.
+- Do not proceed without writing the memory file first.
+
 Do not:
 
 - ask for reset without preserving memory first
@@ -104,18 +111,24 @@ The plan must define:
 - validation method
 - out-of-scope boundary
 
+Plan persistence:
+
+- Before implementing changes, write the plan into `plans/` as `plans/<slug>.md`.
+- Keep the plan file up to date if implementation findings invalidate the original approach.
+
 Rules:
 
 - Do not edit first and justify later.
 - Trivial changes may use a short plan, but not zero plan.
 - Multi-step or cross-module work requires a detailed, checkable plan.
-- If execution invalidates the plan, update the plan before continuing.
+- If execution invalidates the plan, update the plan file before continuing.
 
 Hard requirements:
 
 - Every change MUST have a stated goal.
 - Every change MUST define scope and out-of-scope boundaries.
 - Every change MUST define how success will be verified.
+- Every plan MUST be persisted to `plans/` before implementation starts.
 - “I’ll just quickly fix it” is not a valid substitute for a plan.
 
 ---
