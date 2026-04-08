@@ -4,6 +4,8 @@
 
 这个项目的目标不是让模型“显得更聪明”，而是通过一套明确、可执行、可回归测试的规则，减少代理在真实工作流中的低质量行为。
 
+英文说明见 `README.md`。
+
 ## 这个项目在解决什么问题
 
 很多代理表现变差，并不是因为不会写，而是因为工作流失控。常见问题包括：
@@ -49,10 +51,19 @@ anti-degradation-skill/
 │  ├─ design-principles.md
 │  ├─ failure-modes.md
 │  ├─ evaluation-format.md
+│  ├─ evaluation-format.zh-CN.md
 │  ├─ installation.md
+│  ├─ installation.zh-CN.md
+│  ├─ migration-notes.md
+│  ├─ migration-notes.zh-CN.md
 │  ├─ release-checklist.md
-│  └─ roadmap.md
+│  ├─ rule-coverage.md
+│  ├─ rule-coverage.zh-CN.md
+│  ├─ roadmap.md
+│  ├─ versioning-policy.md
+│  └─ versioning-policy.zh-CN.md
 ├─ scripts/
+│  ├─ check-eval-coverage.js
 │  └─ markdown-tests-to-json.js
 ├─ tests/
 │  ├─ context-budget-gate.md
@@ -89,6 +100,11 @@ anti-degradation-skill/
 11. `Failure Recovery`
 12. `Response Style`
 
+`v0.2.0` 还补充了两层更明确的执行说明：
+
+- `Operational Flow`：先判断意图、再确认歧义、再定义计划、再找证据、最后才实现与验证
+- `Rule Severity`：把规则分成 hard block / strong default / conditional / trivial-task exception，避免所有场景都走同样重的流程
+
 这些规则已经被强化为更接近 system-prompt 的硬约束风格，而不是软建议。
 
 ## tests 目录怎么用
@@ -97,6 +113,7 @@ anti-degradation-skill/
 
 每个文件采用类似结构：
 
+- 每个 `## Case N` 下的 metadata block
 - `Scenario` / `User`
 - `Bad response`
 - `Good response`
@@ -111,10 +128,12 @@ anti-degradation-skill/
 正式格式说明见：
 
 - `docs/evaluation-format.md`
+- `docs/evaluation-format.zh-CN.md`
 
 安装说明见：
 
 - `docs/installation.md`
+- `docs/installation.zh-CN.md`
 
 ## 如何导出 JSON 评测数据
 
@@ -135,6 +154,37 @@ node scripts/markdown-tests-to-json.js
 - `Good response`
 - `Pass criteria`
 
+`npm run check:eval` 还会进一步校验：
+
+- `case_id` 是否唯一
+- `severity` 是否在允许枚举内
+- `rules_covered` 是否非空
+- 核心 gate 是否被 metadata 覆盖到
+
+推荐先用：
+
+```bash
+npm run export:eval
+npm run check:eval
+```
+
+再查看导出的 `generated/evaluation-cases.json`。
+
+## 评测工作流
+
+建议按这个顺序维护：
+
+1. 先确认 failure mode，而不是直接改 skill
+2. 修改 `SKILL.md` 或相关规则说明
+3. 在 `tests/` 里补对应 case
+4. 给 metadata-enabled case 补齐 metadata block
+5. 运行 `npm run export:eval`
+6. 运行 `npm run check:eval`
+7. 检查 `generated/evaluation-cases.json`
+8. 更新 `docs/rule-coverage.md` / `docs/rule-coverage.zh-CN.md`
+
+这让仓库从“只有提示词”变成“规则 + 样例 + 导出 + 校验”的完整闭环。
+
 ## 安装
 
 真正需要发布和安装的 skill 文件是：
@@ -149,7 +199,8 @@ node scripts/markdown-tests-to-json.js
 
 1. 在这个仓库中维护源文件
 2. 运行 `npm run export:eval`
-3. 把 `skills/anti-degradation/SKILL.md` 复制到最终 skill 目录
+3. 运行 `npm run check:eval`
+4. 把 `skills/anti-degradation/SKILL.md` 复制到最终 skill 目录
 
 ## 版本管理
 
@@ -161,6 +212,11 @@ node scripts/markdown-tests-to-json.js
 
 如果你后续要打 tag 或发 release，建议让外部发布版本号和 changelog 条目保持一致。
 
+补充说明见：
+
+- `docs/versioning-policy.md`
+- `docs/versioning-policy.zh-CN.md`
+
 ## 发布流程
 
 建议按这个顺序发布：
@@ -168,10 +224,16 @@ node scripts/markdown-tests-to-json.js
 1. 完成 `SKILL.md`
 2. 补齐或更新 `tests/`
 3. 运行 `npm run export:eval`
-4. 检查 `generated/evaluation-cases.json`
-5. 更新 `skills/anti-degradation/changelog.md`
-6. 确认 `docs/installation.md` 中的安装路径仍然正确
-7. 按 `docs/release-checklist.md` 做最终检查
+4. 运行 `npm run check:eval`
+5. 检查 `generated/evaluation-cases.json`
+6. 更新 `skills/anti-degradation/changelog.md`
+7. 确认 `docs/installation.md` 中的安装路径仍然正确
+8. 按 `docs/release-checklist.md` 做最终检查
+
+补充说明见：
+
+- `docs/migration-notes.md`
+- `docs/migration-notes.zh-CN.md`
 
 ## 评测
 
@@ -179,9 +241,21 @@ node scripts/markdown-tests-to-json.js
 
 - `tests/` 中的人类可读评测样例
 - `docs/evaluation-format.md` 中的正式格式定义
+- `docs/evaluation-format.zh-CN.md` 中的中文格式说明
 - `generated/evaluation-cases.json` 中的机器可读导出结果
+- `docs/rule-coverage.md` / `docs/rule-coverage.zh-CN.md` 中的覆盖说明
 
 这样你在发布 skill 时，不只是发布一份提示词，还能同时发布它的评测依据。
+
+## 发布质量线
+
+发布前至少应满足：
+
+- `SKILL.md` 与相关 `tests/` 的行为描述一致
+- metadata-enabled case 可以成功导出
+- `npm run check:eval` 通过
+- `rule-coverage` 文档反映当前升级范围
+- 安装说明和发布说明仍然匹配当前仓库结构
 
 ## 如何维护这个项目
 
@@ -208,9 +282,9 @@ node scripts/markdown-tests-to-json.js
 ## 后续可扩展方向
 
 - 拆分子 skill，例如 `intent-gate`、`evidence-first`、`validation-gate`
-- 给 tests 增加统一的评测元数据格式
+- 给更多 docs 补齐中文版
 - 增加更偏 review / debugging / architecture 的子规则
-- 建一个轻量评测脚本，把 markdown case 变成自动化回归输入
+- 继续增强轻量评测脚本和覆盖校验能力
 
 ## 一句话概括
 
