@@ -8,7 +8,8 @@ This document maps the v0.2.0 metadata-backed cases to the core rules they cover
 - **Ambiguity Gate**: `AMBIGUITY_GATE_001`, `AMBIGUITY_GATE_002`, `AMBIGUITY_GATE_003`
 - **Evidence Gate**: `EVIDENCE_GATE_001`, `EVIDENCE_GATE_002`, `EVIDENCE_GATE_003`
 - **Validation Gate**: `VALIDATION_GATE_001`, `VALIDATION_GATE_002`, `VALIDATION_GATE_003`, `VALIDATION_GATE_004`
-- **Plan-First Change Rule**: `VALIDATION_GATE_004`
+- **Context Budget Gate**: `CONTEXT_BUDGET_001`, `CONTEXT_BUDGET_002`, `CONTEXT_BUDGET_003`, `CONTEXT_BUDGET_004`, `CONTEXT_BUDGET_005`
+- **Plan-First Change Rule**: `PLAN_FIRST_001`, `PLAN_FIRST_002`, `PLAN_FIRST_003`, `PLAN_FIRST_004`, `PLAN_FIRST_005`, `VALIDATION_GATE_004`
 
 ## Current scope
 
