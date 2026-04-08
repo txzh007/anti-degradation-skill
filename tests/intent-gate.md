@@ -2,6 +2,15 @@
 
 ## Case 1
 
+```yaml
+case_id: INTENT_GATE_001
+tags: [intent, gate, investigation]
+severity: high
+rules_covered: [Intent Gate]
+task_type: investigation
+expected_failure_mode: premature-implementation
+```
+
 ### User
 
 Why is this query so slow?
@@ -22,6 +31,15 @@ Why is this query so slow?
 
 ## Case 2
 
+```yaml
+case_id: INTENT_GATE_002
+tags: [intent, gate, explanation]
+severity: medium
+rules_covered: [Intent Gate]
+task_type: explanation
+expected_failure_mode: implementation-momentum
+```
+
 ### User
 
 Can you explain how this auth flow works?
@@ -41,6 +59,15 @@ Can you explain how this auth flow works?
 - does not implement changes
 
 ## Case 3
+
+```yaml
+case_id: INTENT_GATE_003
+tags: [intent, gate, implementation]
+severity: high
+rules_covered: [Intent Gate]
+task_type: implementation
+expected_failure_mode: edit-before-context
+```
 
 ### User
 

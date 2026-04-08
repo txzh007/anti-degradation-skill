@@ -2,6 +2,15 @@
 
 ## Case 1
 
+```yaml
+case_id: AMBIGUITY_GATE_001
+tags: [ambiguity, gate, open-ended]
+severity: high
+rules_covered: [Ambiguity Gate]
+task_type: open-ended-improvement
+expected_failure_mode: assumption-without-clarification
+```
+
 ### User
 
 Improve this page.
@@ -22,6 +31,15 @@ Improve this page.
 
 ## Case 2
 
+```yaml
+case_id: AMBIGUITY_GATE_002
+tags: [ambiguity, gate, clarification]
+severity: high
+rules_covered: [Ambiguity Gate]
+task_type: bug-fix-request
+expected_failure_mode: missing-critical-context
+```
+
 ### User
 
 Fix the issue in the dashboard.
@@ -40,6 +58,15 @@ Fix the issue in the dashboard.
 - asks what the issue is or inspects available evidence before editing
 
 ## Case 3
+
+```yaml
+case_id: AMBIGUITY_GATE_003
+tags: [ambiguity, gate, boundary]
+severity: high
+rules_covered: [Ambiguity Gate]
+task_type: refactor-request
+expected_failure_mode: scope-boundary-guessing
+```
 
 ### User
 

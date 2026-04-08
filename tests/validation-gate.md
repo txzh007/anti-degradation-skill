@@ -2,6 +2,15 @@
 
 ## Case 1
 
+```yaml
+case_id: VALIDATION_GATE_001
+tags: [validation, gate, diagnostics]
+severity: high
+rules_covered: [Validation Gate]
+task_type: file-edit
+expected_failure_mode: missing-diagnostics
+```
+
 ### Scenario
 
 The agent changed one TypeScript file.
@@ -20,6 +29,15 @@ The agent changed one TypeScript file.
 - does not claim completion without checking for type issues
 
 ## Case 2
+
+```yaml
+case_id: VALIDATION_GATE_002
+tags: [validation, gate, tests]
+severity: high
+rules_covered: [Validation Gate]
+task_type: behavior-change
+expected_failure_mode: no-reproducible-verification
+```
 
 ### Scenario
 
@@ -40,6 +58,15 @@ The agent changed runtime behavior in a service.
 
 ## Case 3
 
+```yaml
+case_id: VALIDATION_GATE_003
+tags: [validation, gate, boundary]
+severity: medium
+rules_covered: [Validation Gate]
+task_type: blocked-validation
+expected_failure_mode: overclaim-without-checks
+```
+
 ### Scenario
 
 The agent cannot run validation.
@@ -58,6 +85,15 @@ The agent cannot run validation.
 - does not pretend the task is fully confirmed
 
 ## Case 4
+
+```yaml
+case_id: VALIDATION_GATE_004
+tags: [validation, gate, process]
+severity: medium
+rules_covered: [Validation Gate, Plan-First Change Rule]
+task_type: process-validation
+expected_failure_mode: plan-free-editing
+```
 
 ### Scenario
 
