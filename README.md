@@ -56,9 +56,13 @@ anti-degradation-skill/
 │  ├─ failure-modes.md
 │  ├─ evaluation-format.md
 │  ├─ installation.md
+│  ├─ migration-notes.md
 │  ├─ release-checklist.md
-│  └─ roadmap.md
+│  ├─ rule-coverage.md
+│  ├─ roadmap.md
+│  └─ versioning-policy.md
 ├─ scripts/
+│  ├─ check-eval-coverage.js
 │  └─ markdown-tests-to-json.js
 ├─ tests/
 │  ├─ context-budget-gate.md
@@ -89,7 +93,7 @@ Its primary job is to prevent the agent from degrading under ambiguity, speed pr
 3. Use `tests/` as regression cases whenever you refine the skill.
 4. Add new examples whenever you encounter a new failure pattern in real usage.
 
-The `tests/` directory is written in an evaluation-oriented format with `Bad response`, `Good response`, and `Pass criteria` sections so it can also serve as a lightweight regression dataset.
+The `tests/` directory is written in an evaluation-oriented format with per-case metadata plus `Bad response`, `Good response`, and `Pass criteria` sections so it can also serve as a lightweight regression dataset.
 
 The formal structure for those files is documented in `docs/evaluation-format.md`.
 
@@ -107,12 +111,45 @@ Output:
 
 - `generated/evaluation-cases.json`
 
-The script validates that each case contains:
+The export script validates that each case contains:
 
 - `Scenario` or `User`
 - `Bad response`
 - `Good response`
 - `Pass criteria`
+
+The coverage check additionally validates:
+
+- unique `case_id` values
+- allowed `severity` values
+- non-empty `rules_covered`
+- coverage for the core gates upgraded in v0.2.0
+
+## Evaluation workflow
+
+Recommended workflow:
+
+1. update `SKILL.md` only after the target failure mode is understood
+2. add or revise cases in `tests/`
+3. include metadata immediately after each `## Case N` heading for metadata-enabled files
+4. run `npm run export:eval`
+5. run `npm run check:eval`
+6. inspect `generated/evaluation-cases.json`
+7. update `docs/rule-coverage.md` and changelog notes if release scope changed
+
+## When to use this repository
+
+Best fit:
+
+- coding agents that degrade into premature implementation
+- repo analysis and debugging workflows
+- evaluation-driven prompt or skill iteration
+
+Less suitable without adaptation:
+
+- casual chat assistants
+- highly creative freeform writing agents
+- ultra-lightweight flows where evaluation overhead is intentionally minimal
 
 ## Install
 
@@ -147,10 +184,11 @@ Recommended release flow:
 1. finalize `SKILL.md`
 2. update or add matching cases in `tests/`
 3. run `npm run export:eval`
-4. inspect `generated/evaluation-cases.json`
-5. update `skills/anti-degradation/changelog.md`
-6. verify `docs/installation.md` still matches the intended distribution path
-7. use `docs/release-checklist.md` before publishing
+4. run `npm run check:eval`
+5. inspect `generated/evaluation-cases.json`
+6. update `skills/anti-degradation/changelog.md`
+7. verify `docs/installation.md` still matches the intended distribution path
+8. use `docs/release-checklist.md` before publishing
 
 ## Evaluation
 
@@ -159,8 +197,19 @@ This project includes:
 - human-readable evaluation cases in `tests/`
 - a formal case schema in `docs/evaluation-format.md`
 - machine-readable export in `generated/evaluation-cases.json`
+- coverage guidance in `docs/rule-coverage.md`
 
 This makes the skill easier to review, compare, and publish with evidence instead of prompt-only claims.
+
+## Release quality bar
+
+Before shipping a release, the minimum bar is:
+
+- `SKILL.md` and the relevant tests agree on the intended behavior
+- metadata-enabled cases export successfully
+- `npm run check:eval` passes
+- `docs/rule-coverage.md` reflects the upgraded cases
+- installation and release docs still match the intended distribution path
 
 ## Contribution workflow
 
