@@ -6,6 +6,6 @@
   "license": "MIT",
   "scripts": {
     "export:eval": "node scripts/markdown-tests-to-json.js",
-    "check:eval": "node scripts/markdown-tests-to-json.js"
+    "check:eval": "node scripts/markdown-tests-to-json.js && node scripts/check-eval-coverage.js"
   }
 }

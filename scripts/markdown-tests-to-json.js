@@ -29,6 +29,44 @@ function normalizeBlock(text) {
 }
 
 function parseCaseBlock(caseName, block) {
+  // Optional per-case metadata: a YAML fenced block at the start of the case block.
+  // This keeps metadata ownership unambiguous and prevents later-case metadata from
+  // being attached to the current case.
+  function extractMetadataFromBlock(text) {
+    const metadata = {};
+    const yamlFence = /^\s*```yaml\s*\n([\s\S]*?)\n```\s*/m.exec(text);
+    if (!yamlFence || yamlFence.index !== 0) {
+      return null;
+    }
+
+    const yaml = yamlFence[1];
+    yaml.split(/\r?\n/).forEach((line) => {
+      const m = line.match(/^\s*([a-zA-Z_]+)\s*:\s*(.*)$/);
+      if (m) {
+        metadata[m[1]] = m[2].trim();
+      }
+    });
+
+    // Normalize common fields
+    if (metadata.tags && typeof metadata.tags === 'string') {
+      metadata.tags = metadata.tags
+        .replace(/^\[|\]$/g, '')
+        .split(',')
+        .map((t) => t.trim())
+        .filter((t) => t.length > 0);
+    }
+    if (metadata.rules_covered && typeof metadata.rules_covered === 'string') {
+      // Split by comma or semicolon and trim
+      metadata.rules_covered = metadata.rules_covered
+        .replace(/^\[|\]$/g, '')
+        .split(/[;,]/)
+        .map((s) => s.trim())
+        .filter((s) => s.length > 0);
+    }
+
+    return Object.keys(metadata).length > 0 ? metadata : null;
+  }
+
   const sectionRegex = /###\s+(Scenario|User|Bad response|Good response|Pass criteria)\s*\n([\s\S]*?)(?=\n###\s+|$)/g;
   const sections = {};
   let match;
@@ -47,6 +85,7 @@ function parseCaseBlock(caseName, block) {
     .filter((line) => line.startsWith('- '))
     .map((line) => line.slice(2).trim());
 
+  const metadata = extractMetadataFromBlock(block);
   return {
     case: caseName,
     input_type: inputType,
@@ -54,6 +93,7 @@ function parseCaseBlock(caseName, block) {
     bad_response: sections['Bad response'] ? normalizeBlock(sections['Bad response']) : null,
     good_response: sections['Good response'] ? normalizeBlock(sections['Good response']) : null,
     pass_criteria: passCriteria,
+    metadata,
   };
 }
 
