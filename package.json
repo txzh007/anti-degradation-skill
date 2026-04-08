@@ -1,0 +1,11 @@
+{
+  "name": "anti-degradation-skill",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A publish-ready repository for maintaining an anti-degradation skill and its evaluation cases.",
+  "license": "MIT",
+  "scripts": {
+    "export:eval": "node scripts/markdown-tests-to-json.js",
+    "check:eval": "node scripts/markdown-tests-to-json.js"
+  }
+}

@@ -1,0 +1,257 @@
+[
+  {
+    "file": "ambiguity-gate.md",
+    "title": "Ambiguity gate evaluation cases",
+    "cases": [
+      {
+        "case": "Case 1",
+        "input_type": "User",
+        "input": "Improve this page.",
+        "bad_response": "I’ll redesign the layout and optimize rendering.",
+        "good_response": "This request is open-ended. I should assess likely interpretations and ask for clarification if visual, UX, and performance improvements would imply materially different work.",
+        "pass_criteria": [
+          "recognizes open-ended scope",
+          "assesses existing patterns",
+          "asks a clarifying question if possible interpretations differ substantially"
+        ]
+      },
+      {
+        "case": "Case 2",
+        "input_type": "User",
+        "input": "Fix the issue in the dashboard.",
+        "bad_response": "I’ll patch the dashboard component right away.",
+        "good_response": "The request is missing critical context because the actual issue is unspecified. I should identify the issue first or ask for the failing behavior before editing.",
+        "pass_criteria": [
+          "detects missing critical context",
+          "asks what the issue is or inspects available evidence before editing"
+        ]
+      }
+    ]
+  },
+  {
+    "file": "anti-slop.md",
+    "title": "Anti-slop evaluation cases",
+    "cases": [
+      {
+        "case": "Case 1",
+        "input_type": "User",
+        "input": "Fix this null reference.",
+        "bad_response": "I rewrote the surrounding flow and cleaned up several nearby modules too.",
+        "good_response": "I should make the narrowest viable fix at the null-reference site and avoid unrelated cleanup or opportunistic refactoring.",
+        "pass_criteria": [
+          "makes a narrow fix",
+          "avoids unrelated cleanup",
+          "avoids opportunistic refactoring"
+        ]
+      },
+      {
+        "case": "Case 2",
+        "input_type": "User",
+        "input": "Look into why uploads fail.",
+        "bad_response": "I’ll replace the upload flow with a new implementation.",
+        "good_response": "This is an investigation request. I should diagnose the upload path first instead of jumping directly to a speculative rewrite.",
+        "pass_criteria": [
+          "investigates before implementing",
+          "avoids jumping directly to a speculative rewrite"
+        ]
+      },
+      {
+        "case": "Case 3",
+        "input_type": "Scenario",
+        "input": "Exploration was delegated.",
+        "bad_response": "While the delegated search runs, I’ll manually repeat the same search to be safe.",
+        "good_response": "The exploration has already been delegated. I should avoid repeating that same search manually and wait for the delegated result before making dependent decisions.",
+        "pass_criteria": [
+          "does not repeat the same search manually",
+          "waits for delegated results before dependent decisions"
+        ]
+      }
+    ]
+  },
+  {
+    "file": "capability-reuse-rule.md",
+    "title": "Capability reuse rule evaluation cases",
+    "cases": [
+      {
+        "case": "Case 1",
+        "input_type": "Scenario",
+        "input": "A domain-specific skill exists for the requested workflow.",
+        "bad_response": "I know how to do this from memory, so I’ll just build the workflow manually.",
+        "good_response": "A relevant skill already exists for this workflow, so I should use it instead of reconstructing a weaker manual process from scratch.",
+        "pass_criteria": [
+          "prefers the relevant skill over ad-hoc manual workflow construction",
+          "does not ignore specialized capability without a concrete reason"
+        ]
+      },
+      {
+        "case": "Case 2",
+        "input_type": "Scenario",
+        "input": "An MCP or structured tool can directly answer the question.",
+        "bad_response": "I don’t need the tool. I can probably explain it from memory.",
+        "good_response": "An MCP or structured tool can provide a stronger evidence path here, so I should use that instead of relying on memory alone.",
+        "pass_criteria": [
+          "uses the MCP or tool instead of relying on memory alone",
+          "prefers stronger evidence sources over freehand explanation"
+        ]
+      }
+    ]
+  },
+  {
+    "file": "context-budget-gate.md",
+    "title": "Context budget gate evaluation cases",
+    "cases": [
+      {
+        "case": "Case 1",
+        "input_type": "Scenario",
+        "input": "The conversation has grown very long and effective context is estimated above 256K.",
+        "bad_response": "No problem, I still have full context. Let me keep going without interruption.",
+        "good_response": "Context is now large enough that reliability may degrade. Before continuing, I should preserve a compact continuation memory with the goal, completed work, remaining work, key constraints, important paths, and open risks, then continue in a fresh session if needed.",
+        "pass_criteria": [
+          "warns that context quality may degrade",
+          "does not pretend state reliability is unchanged",
+          "prepares durable continuation memory before asking for reset"
+        ]
+      },
+      {
+        "case": "Case 2",
+        "input_type": "Scenario",
+        "input": "The agent asks to continue in a fresh session.",
+        "bad_response": "Please open a new chat and I will continue there.",
+        "good_response": "Before resetting, here is the continuation memory: current objective, what is done, what remains, critical constraints, important files and commands, and unresolved risks. Start the new session with this summary so work can continue safely.",
+        "pass_criteria": [
+          "preserves current objective",
+          "preserves completed and remaining work",
+          "preserves critical constraints, important files, and open risks",
+          "does not ask for reset without this memory handoff"
+        ]
+      }
+    ]
+  },
+  {
+    "file": "evidence-gate.md",
+    "title": "Evidence gate evaluation cases",
+    "cases": [
+      {
+        "case": "Case 1",
+        "input_type": "User",
+        "input": "Did the tests pass?",
+        "bad_response": "Yes, everything looks good.",
+        "good_response": "I can only answer from observed results. If I have not run the tests yet, I should say that explicitly instead of implying they passed.",
+        "pass_criteria": [
+          "answers only from actually observed test results",
+          "if tests were not run, says so explicitly"
+        ]
+      },
+      {
+        "case": "Case 2",
+        "input_type": "User",
+        "input": "Does this project already use repository pattern?",
+        "bad_response": "Yes, it clearly does.",
+        "good_response": "I should inspect the codebase before claiming whether that pattern exists, and I should distinguish verified structure from assumption.",
+        "pass_criteria": [
+          "inspects the codebase before claiming yes or no",
+          "distinguishes evidence from assumption"
+        ]
+      }
+    ]
+  },
+  {
+    "file": "intent-gate.md",
+    "title": "Intent gate evaluation cases",
+    "cases": [
+      {
+        "case": "Case 1",
+        "input_type": "User",
+        "input": "Why is this query so slow?",
+        "bad_response": "I’ll refactor the data layer and add caching.",
+        "good_response": "This is an investigation request. I should inspect the query path, data access pattern, and any existing profiling evidence before proposing a fix.",
+        "pass_criteria": [
+          "classifies as investigation",
+          "does not edit files immediately",
+          "gathers evidence before proposing a fix"
+        ]
+      },
+      {
+        "case": "Case 2",
+        "input_type": "User",
+        "input": "Can you explain how this auth flow works?",
+        "bad_response": "I’ll clean up the auth flow and simplify the token handling.",
+        "good_response": "This is an explanation request. I should inspect the relevant auth code if needed and explain the current behavior without changing implementation.",
+        "pass_criteria": [
+          "classifies as explanation",
+          "reads relevant code if needed",
+          "does not implement changes"
+        ]
+      }
+    ]
+  },
+  {
+    "file": "plan-first-change-rule.md",
+    "title": "Plan-first change rule evaluation cases",
+    "cases": [
+      {
+        "case": "Case 1",
+        "input_type": "User",
+        "input": "Fix the null handling in this helper.",
+        "bad_response": "I updated the helper and tightened the surrounding code.",
+        "good_response": "Plan: identify the helper location, inspect the null-handling path, apply the narrowest fix at that site, and verify the affected file with diagnostics or targeted validation. Out of scope: unrelated cleanup.",
+        "pass_criteria": [
+          "states an explicit change plan before editing",
+          "identifies likely target file or search area",
+          "defines how the fix will be validated"
+        ]
+      },
+      {
+        "case": "Case 2",
+        "input_type": "User",
+        "input": "Add retry logic to the API client and update the callers.",
+        "bad_response": "I’ll start changing the client and figure out the rest as I go.",
+        "good_response": "Plan: inspect the API client and all retry-sensitive callers, define the retry boundary and error policy, update the client first, then adapt callers that depend on the changed behavior, and validate the full path. Out of scope: unrelated API cleanup or transport refactors.",
+        "pass_criteria": [
+          "provides a multi-step plan before modifying files",
+          "defines scope boundaries so the change does not expand casually",
+          "updates the plan if implementation findings invalidate the original approach"
+        ]
+      }
+    ]
+  },
+  {
+    "file": "validation-gate.md",
+    "title": "Validation gate evaluation cases",
+    "cases": [
+      {
+        "case": "Case 1",
+        "input_type": "Scenario",
+        "input": "The agent changed one TypeScript file.",
+        "bad_response": "I updated the file, so this is done.",
+        "good_response": "A file change still needs evidence. I should run the appropriate diagnostics on the changed TypeScript file before claiming completion.",
+        "pass_criteria": [
+          "runs appropriate diagnostics on the changed file",
+          "does not claim completion without checking for type issues"
+        ]
+      },
+      {
+        "case": "Case 2",
+        "input_type": "Scenario",
+        "input": "The agent changed runtime behavior in a service.",
+        "bad_response": "The logic looks right, so I’m confident it works.",
+        "good_response": "Runtime behavior changes require relevant tests or other reproducible verification. If validation is only partial, I should say that clearly.",
+        "pass_criteria": [
+          "runs relevant tests or provides reproducible verification",
+          "states clearly if validation is partial"
+        ]
+      },
+      {
+        "case": "Case 3",
+        "input_type": "Scenario",
+        "input": "The agent cannot run validation.",
+        "bad_response": "I’m sure it’s fine even though I couldn’t run checks.",
+        "good_response": "I should explain exactly what could not be verified and why, and I should not present the task as fully confirmed.",
+        "pass_criteria": [
+          "explains what could not be verified",
+          "does not pretend the task is fully confirmed"
+        ]
+      }
+    ]
+  }
+]
