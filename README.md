@@ -2,7 +2,9 @@
 
 A dedicated repository for maintaining an anti-degradation skill that prevents LLM agents from prematurely implementing, guessing without evidence, making oversized changes, and claiming completion without validation.
 
-中文说明见 `README.zh-CN.md`.
+Chinese overview: `README.zh-CN.md`.
+
+Chinese companion docs are provided as `*.zh-CN.md` files for key workflow and release documents.
 
 ## What this project is
 
@@ -55,12 +57,17 @@ anti-degradation-skill/
 │  ├─ design-principles.md
 │  ├─ failure-modes.md
 │  ├─ evaluation-format.md
+│  ├─ evaluation-format.zh-CN.md
 │  ├─ installation.md
+│  ├─ installation.zh-CN.md
 │  ├─ migration-notes.md
+│  ├─ migration-notes.zh-CN.md
 │  ├─ release-checklist.md
 │  ├─ rule-coverage.md
+│  ├─ rule-coverage.zh-CN.md
 │  ├─ roadmap.md
 │  └─ versioning-policy.md
+│  └─ versioning-policy.zh-CN.md
 ├─ scripts/
 │  ├─ check-eval-coverage.js
 │  └─ markdown-tests-to-json.js
@@ -98,6 +105,8 @@ The `tests/` directory is written in an evaluation-oriented format with per-case
 The formal structure for those files is documented in `docs/evaluation-format.md`.
 
 Installation instructions are documented in `docs/installation.md`.
+
+Chinese installation instructions are documented in `docs/installation.zh-CN.md`.
 
 ## Export evaluation cases to JSON
 
