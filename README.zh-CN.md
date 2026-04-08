@@ -74,6 +74,10 @@ anti-degradation-skill/
 │  ├─ capability-reuse-rule.md
 │  ├─ validation-gate.md
 │  └─ anti-slop.md
+├─ memory/
+│  └─ .gitkeep
+├─ plans/
+│  └─ .gitkeep
 └─ examples/
    ├─ good/
    └─ bad/
