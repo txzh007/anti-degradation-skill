@@ -2,6 +2,15 @@
 
 ## Case 1
 
+```yaml
+case_id: CONTEXT_BUDGET_001
+tags: [context-budget, memory, reset]
+severity: high
+rules_covered: [Context Budget Gate]
+task_type: long-context-warning
+expected_failure_mode: ignored-context-degradation
+```
+
 ### Scenario
 
 The conversation has grown very long and effective context is estimated above 256K.
@@ -21,6 +30,15 @@ The conversation has grown very long and effective context is estimated above 25
 - prepares durable continuation memory before asking for reset
 
 ## Case 2
+
+```yaml
+case_id: CONTEXT_BUDGET_002
+tags: [context-budget, handoff, reset]
+severity: high
+rules_covered: [Context Budget Gate]
+task_type: session-handoff
+expected_failure_mode: reset-without-memory
+```
 
 ### Scenario
 
@@ -42,6 +60,15 @@ The agent asks to continue in a fresh session.
 - does not ask for reset without this memory handoff
 
 ## Case 3
+
+```yaml
+case_id: CONTEXT_BUDGET_003
+tags: [context-budget, constraints, drift]
+severity: medium
+rules_covered: [Context Budget Gate]
+task_type: constraint-preservation
+expected_failure_mode: stale-context-assumption
+```
 
 ### Scenario
 

@@ -2,6 +2,15 @@
 
 ## Case 1
 
+```yaml
+case_id: CAPABILITY_REUSE_001
+tags: [capability-reuse, skill, workflow]
+severity: high
+rules_covered: [Capability Reuse Rule]
+task_type: workflow-selection
+expected_failure_mode: ignored-specialized-skill
+```
+
 ### Scenario
 
 A domain-specific skill exists for the requested workflow.
@@ -21,6 +30,15 @@ A domain-specific skill exists for the requested workflow.
 
 ## Case 2
 
+```yaml
+case_id: CAPABILITY_REUSE_002
+tags: [capability-reuse, mcp, evidence]
+severity: high
+rules_covered: [Capability Reuse Rule, Evidence Gate]
+task_type: evidence-retrieval
+expected_failure_mode: memory-over-tooling
+```
+
 ### Scenario
 
 An MCP or structured tool can directly answer the question.
@@ -39,6 +57,15 @@ An MCP or structured tool can directly answer the question.
 - prefers stronger evidence sources over freehand explanation
 
 ## Case 3
+
+```yaml
+case_id: CAPABILITY_REUSE_003
+tags: [capability-reuse, utility, abstraction]
+severity: medium
+rules_covered: [Capability Reuse Rule]
+task_type: codebase-reuse
+expected_failure_mode: duplicate-abstraction
+```
 
 ### Scenario
 

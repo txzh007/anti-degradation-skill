@@ -2,6 +2,15 @@
 
 ## Case 1
 
+```yaml
+case_id: PLAN_FIRST_001
+tags: [plan-first, bug-fix, narrow-scope]
+severity: high
+rules_covered: [Plan-First Change Rule]
+task_type: bug-fix
+expected_failure_mode: edit-before-plan
+```
+
 ### User
 
 Fix the null handling in this helper.
@@ -22,6 +31,15 @@ Fix the null handling in this helper.
 
 ## Case 2
 
+```yaml
+case_id: PLAN_FIRST_002
+tags: [plan-first, multi-step, callers]
+severity: high
+rules_covered: [Plan-First Change Rule]
+task_type: multi-file-change
+expected_failure_mode: scope-drift-without-plan
+```
+
 ### User
 
 Add retry logic to the API client and update the callers.
@@ -41,6 +59,15 @@ Add retry logic to the API client and update the callers.
 - updates the plan if implementation findings invalidate the original approach
 
 ## Case 3
+
+```yaml
+case_id: PLAN_FIRST_003
+tags: [plan-first, trivial-change, lightweight]
+severity: medium
+rules_covered: [Plan-First Change Rule]
+task_type: trivial-change
+expected_failure_mode: skipped-plan-for-small-task
+```
 
 ### Scenario
 
